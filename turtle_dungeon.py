@@ -6,11 +6,13 @@ class Manager():
         self.contChance = continueChance
         self.roomCount = 0
         self.scale = scale
+        self.path = ""
 
     def DrawInitialRoom(self, t):
         t.penup()
         t.forward(10 * manager.scale)
         t.pendown()
+        #print(t.pos())
         t.begin_fill()
         t.right(90)
         t.forward(10 * manager.scale)
@@ -33,6 +35,7 @@ class Manager():
         t.forward(10 * manager.scale)
         t.pendown()
         t.forward(25 * manager.scale) #door
+        #print(t.pos())
         t.begin_fill()
         t.right(90)
         t.forward(10 * manager.scale)
@@ -49,6 +52,7 @@ class Manager():
         t.penup()
         t.forward(10 * manager.scale)
         manager.roomCount += 1
+        manager.mainPath = manager.path + 'f'
 
 def DecideDirection(t):
     x = random.random()
@@ -58,8 +62,10 @@ def DecideDirection(t):
         y = random.randrange(0, 2)
         if y == 0:
             t.right(90)
+            manager.path = manager.path + 'r'
         else:
             t.left(90)
+            manager.path = manager.path + 'l'
 
 def RandomDirection(t):
     x = random.random()
@@ -72,7 +78,7 @@ def RandomDirection(t):
     else:
         return
 
-manager = Manager(0.4, 0.5)
+manager = Manager(0.8, 0.5)
 turtle.setup(1200, 800)
 win = turtle.Screen()
 win.bgcolor('black')
@@ -86,7 +92,9 @@ alex.color('white')
 manager.DrawInitialRoom(alex)
 while(manager.roomCount < 100):
     manager.DrawRoom(alex)
-    #DecideDirection(alex)
-    RandomDirection(alex)
+    DecideDirection(alex)
+    #RandomDirection(alex)
+
+print(manager.path)
 
 
