@@ -1,18 +1,19 @@
 import turtle
 import random
+from L_system import L_system
 
 class Manager():
-    def __init__(self, continueChance, scale):
+    def __init__(self, continueChance):
         self.contChance = continueChance
         self.roomCount = 0
-        self.scale = scale
+        self.scale = 0.5
         self.path = ""
+        self.pathList = []
 
     def DrawInitialRoom(self, t):
         t.penup()
         t.forward(10 * manager.scale)
         t.pendown()
-        #print(t.pos())
         t.begin_fill()
         t.right(90)
         t.forward(10 * manager.scale)
@@ -35,7 +36,6 @@ class Manager():
         t.forward(10 * manager.scale)
         t.pendown()
         t.forward(25 * manager.scale) #door
-        #print(t.pos())
         t.begin_fill()
         t.right(90)
         t.forward(10 * manager.scale)
@@ -52,7 +52,7 @@ class Manager():
         t.penup()
         t.forward(10 * manager.scale)
         manager.roomCount += 1
-        manager.mainPath = manager.path + 'f'
+        manager.path = manager.path + 'f'
 
 def DecideDirection(t):
     x = random.random()
@@ -78,23 +78,53 @@ def RandomDirection(t):
     else:
         return
 
-manager = Manager(0.8, 0.5)
+def DrawFromInput(t, in_str):
+    print("Drawing from input")
+    print(in_str)
+    manager.DrawInitialRoom(t)
+    for ch in in_str:
+        if ch == 'f':
+            manager.DrawRoom(t)
+        elif ch == 'l':
+            t.left(90)
+        elif ch == 'r':
+            t.right(90)
+        else:
+            print("Unexpected input")
+
+def Reset(this_screen, this_turtle):
+    this_screen.reset()
+    this_screen.bgcolor('black')
+    this_turtle.color('white')
+    this_turtle.pensize(4)
+    this_turtle.ht()
+    this_turtle.speed('fastest')
+
+def SavePath():
+    print(manager.path)
+    manager.pathList.append(manager.path)
+    manager.path = ''
+    
+manager = Manager(0.8)
+
 turtle.setup(1200, 800)
 win = turtle.Screen()
-win.bgcolor('black')
-win.screensize(5000, 5000)
+win.screensize(3000, 3000)
 alex = turtle.Turtle()
-alex.speed('fastest')
-alex.pensize(4)
-alex.ht()
-alex.color('white')
+
+Reset(win, alex)
 
 manager.DrawInitialRoom(alex)
-while(manager.roomCount < 100):
+while(manager.roomCount < 25):
     manager.DrawRoom(alex)
     DecideDirection(alex)
     #RandomDirection(alex)
 
-print(manager.path)
+SavePath()
+Reset(win, alex)
 
+l_sys = L_system()
+iteration = l_sys.createSystem(1, manager.pathList[0])
+manager.pathList.append(iteration)
+DrawFromInput(alex, manager.pathList[1])
 
