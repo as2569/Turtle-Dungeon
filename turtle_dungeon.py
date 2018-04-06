@@ -9,7 +9,8 @@ class Manager():
         self.scale = 0.5
         self.path = ""
         self.pathList = []
-
+        self.stack = []
+        
     def DrawInitialRoom(self, t):
         t.penup()
         t.forward(10 * manager.scale)
@@ -59,7 +60,7 @@ class Manager():
         if x <= self.contChance:
             return
         else:
-            y = random.randrange(0, 3)
+            y = random.randrange(0, 2) #disable u
             if y == 0:
                 t.right(90)
                 self.path = self.path + 'r'
@@ -71,8 +72,8 @@ class Manager():
                 self.path = self.path + 'u'
 
     def RandomWalk(self, t):
-        while(manager.roomCount < 50):
-            rand = random.randrange(4, 7)
+        while(manager.roomCount < 30):
+            rand = random.randrange(5, 9)
             for x in range(rand):
                 self.DrawRoom(alex)
             self.DecideDirection(alex)
@@ -87,7 +88,20 @@ class Manager():
             t.left(180)
         else:
             return
+    
+    def pushToStack(self, t):
+        state = (t.pos(), t.heading())
+        self.stack.append(state)
 
+    def popFromStack(self):
+        state = self.stack.pop()
+        return state
+
+    def moveToPos(self, t):
+        state = self.popFromStack()
+        t.setpos(state[0])
+        t.seth(state[1])
+        
     def DrawFromInput(self, t, in_str):
         print("Drawing from input")
         print(in_str)
@@ -101,6 +115,10 @@ class Manager():
                 t.right(90)
             elif ch == 'u':
                 t.left(180)
+            elif ch == '[':
+                self.pushToStack(t)
+            elif ch == ']':
+                self.moveToPos(t)
             else:
                 print("Unexpected input")
 
@@ -118,11 +136,11 @@ def SavePath():
     manager.path = ''
 
 manager = Manager(0.5)
-l_sys = L_system()
 turtle.setup(1200, 800)
 win = turtle.Screen()
 win.screensize(2000, 2000)
 alex = turtle.Turtle()
+l_sys = L_system()
 
 Reset(win, alex)
 
