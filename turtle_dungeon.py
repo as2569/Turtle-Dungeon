@@ -6,7 +6,7 @@ class Manager():
     def __init__(self, continueChance):
         self.contChance = continueChance
         self.roomCount = 0
-        self.scale = 0.5
+        self.scale = 0.25
         self.path = ""
         self.pathList = []
         self.stack = []
@@ -72,12 +72,18 @@ class Manager():
                 self.path = self.path + 'u'
 
     def RandomWalk(self, t):
-        while(manager.roomCount < 30):
-            rand = random.randrange(5, 9)
+        while(manager.roomCount < 15):
+            rand = random.randrange(6, 11)
             for x in range(rand):
-                self.DrawRoom(alex)
-            self.DecideDirection(alex)
-        
+                self.DrawRoom(t)
+            self.DecideDirection(t)
+        self.EndCorridor(t)
+
+    def EndCorridor(self, t):
+        for x in range(4):
+            self.DrawRoom(t)
+        self.path = self.path + 'u'
+            
     def RandomDirection(self, t):
         x = random.random()
         if x <= 0.25:
@@ -135,7 +141,7 @@ def SavePath():
     manager.pathList.append(manager.path)
     manager.path = ''
 
-manager = Manager(0.5)
+manager = Manager(0.2)
 turtle.setup(1200, 800)
 win = turtle.Screen()
 win.screensize(2000, 2000)
@@ -148,9 +154,14 @@ manager.DrawInitialRoom(alex)
 manager.RandomWalk(alex)
 
 SavePath()
-Reset(win, alex)
 
-iteration = l_sys.createSystem(1, manager.pathList[0])
-manager.pathList.append(iteration)
-manager.DrawFromInput(alex, manager.pathList[1])
+for i in range(0, 2):
+    Reset(win, alex)
+    manager.path = l_sys.evolve(manager.pathList[i])
+    #manager.pathList.append(iteration)
+    manager.DrawFromInput(alex, manager.path)
+    SavePath()
+    
+#manager.pathList.append(iteration)
+#manager.DrawFromInput(alex, manager.pathList[1])
 
