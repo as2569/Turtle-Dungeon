@@ -72,8 +72,9 @@ class Manager():
                 self.path = self.path + 'u'
 
     def RandomWalk(self, t):
-        while(manager.roomCount < 15):
-            rand = random.randrange(6, 11)
+        self.DrawInitialRoom(t)
+        while(manager.roomCount < 30):
+            rand = random.randrange(10, 15)
             for x in range(rand):
                 self.DrawRoom(t)
             self.DecideDirection(t)
@@ -139,7 +140,7 @@ def Reset(this_screen, this_turtle):
 def SavePath():
     print(manager.path)
     manager.pathList.append(manager.path)
-    manager.path = ''
+    manager.path = ""
 
 manager = Manager(0.2)
 turtle.setup(1200, 800)
@@ -150,18 +151,14 @@ l_sys = L_system()
 
 Reset(win, alex)
 
-manager.DrawInitialRoom(alex)
 manager.RandomWalk(alex)
 
-SavePath()
-
-for i in range(0, 2):
+initialPath = manager.path
+for i in range(0, 3):
+    currentPath = ""
     Reset(win, alex)
-    manager.path = l_sys.evolve(manager.pathList[i])
-    #manager.pathList.append(iteration)
-    manager.DrawFromInput(alex, manager.path)
-    SavePath()
-    
-#manager.pathList.append(iteration)
-#manager.DrawFromInput(alex, manager.pathList[1])
+    currentPath = l_sys.evolve(initialPath)
+    manager.DrawFromInput(alex, currentPath)
+    initialPath = currentPath
 
+print("DONE")
