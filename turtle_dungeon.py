@@ -6,7 +6,7 @@ class Manager():
     def __init__(self, continueChance):
         self.contChance = continueChance
         self.roomCount = 0
-        self.scale = 0.25
+        self.scale = 0.5
         self.path = ""
         self.pathList = []
         self.stack = []
@@ -73,7 +73,7 @@ class Manager():
 
     def RandomWalk(self, t):
         self.DrawInitialRoom(t)
-        while(manager.roomCount < 30):
+        while(manager.roomCount < 15):
             rand = random.randrange(10, 15)
             for x in range(rand):
                 self.DrawRoom(t)
@@ -81,9 +81,11 @@ class Manager():
         self.EndCorridor(t)
 
     def EndCorridor(self, t):
-        for x in range(4):
+        for x in range(2):
             self.DrawRoom(t)
         self.path = self.path + 'u'
+        for y in range(2):
+            self.DrawRoom(t)
             
     def RandomDirection(self, t):
         x = random.random()
