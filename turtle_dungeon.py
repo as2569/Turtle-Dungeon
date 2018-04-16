@@ -60,7 +60,7 @@ class Manager():
         if x <= self.contChance:
             return
         else:
-            y = random.randrange(0, 2) #disable u
+            y = random.randrange(0, 2) # 2 for lr, 3 for lru
             if y == 0:
                 t.right(90)
                 self.path = self.path + 'r'
@@ -73,7 +73,7 @@ class Manager():
 
     def RandomWalk(self, t):
         self.DrawInitialRoom(t)
-        while(manager.roomCount < 15):
+        while(manager.roomCount < 30):
             rand = random.randrange(10, 15)
             for x in range(rand):
                 self.DrawRoom(t)
@@ -156,7 +156,7 @@ Reset(win, alex)
 manager.RandomWalk(alex)
 
 initialPath = manager.path
-for i in range(0, 3):
+for i in range(0, 8):
     currentPath = ""
     Reset(win, alex)
     currentPath = l_sys.evolve(initialPath)
