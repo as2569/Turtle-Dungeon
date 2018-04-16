@@ -5,7 +5,7 @@ from L_system import L_system
 class Manager():
     def __init__(self, continueChance):
         self.contChance = continueChance
-        self.roomCount = 0
+        self.count = 0
         self.scale = 0.5
         self.path = ""
         self.pathList = []
@@ -30,7 +30,7 @@ class Manager():
         t.end_fill()
         t.penup()
         t.forward(10 * manager.scale)
-        manager.roomCount += 1
+        manager.count += 1
         
     def DrawRoom(self, t):
         t.penup()
@@ -52,7 +52,7 @@ class Manager():
         t.end_fill()
         t.penup()
         t.forward(10 * manager.scale)
-        manager.roomCount += 1
+        manager.count += 1
         manager.path = manager.path + 'f'
 
     def DecideDirection(self, t):
@@ -73,7 +73,7 @@ class Manager():
 
     def RandomWalk(self, t):
         self.DrawInitialRoom(t)
-        while(manager.roomCount < 30):
+        while(manager.count < 30):
             rand = random.randrange(10, 15)
             for x in range(rand):
                 self.DrawRoom(t)
