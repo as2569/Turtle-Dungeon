@@ -17,6 +17,7 @@ class Manager():
         t.penup()
         t.backward(5 * manager.scale)
         t.pendown()
+        t.color('green')
         t.begin_fill()
         t.right(90)
         t.forward(5 * manager.scale)
@@ -31,9 +32,34 @@ class Manager():
         t.left(90)
         t.end_fill()
         t.penup()
+        t.color('white')
         t.forward(5 * manager.scale)
         manager.count += 1
-        manager.path = manager.path + 'f'
+        manager.path = manager.path + '^'
+
+    def DrawFinalRoom(self, t):
+        t.penup()
+        t.backward(5 * manager.scale)
+        t.pendown()
+        t.color('red')
+        t.begin_fill()
+        t.right(90)
+        t.forward(5 * manager.scale)
+        t.left(90)
+        t.forward(10 * manager.scale)
+        t.left(90)
+        t.forward(10 * manager.scale)
+        t.left(90)
+        t.forward(10 * manager.scale)
+        t.left(90)
+        t.forward(5 * manager.scale)
+        t.left(90)
+        t.end_fill()
+        t.penup()
+        t.color('white')
+        t.forward(5 * manager.scale)
+        manager.count += 1
+        manager.path = manager.path + '#'
         
     def DrawRoom(self, t):
         t.penup()
@@ -89,21 +115,21 @@ class Manager():
 
     def RandomWalk(self, t):
         self.DrawInitialRoom(t)
-        self.RandomDirection(t)
         while(manager.count < 30):
             self.DrawLongCorridor(t)
             self.DecideDirection(t, 3)
+        self.DrawFinalRoom(t)
     
-    def pushToStack(self, t):
+    def PushToStack(self, t):
         state = (t.pos(), t.heading())
         self.stack.append(state)
 
-    def popFromStack(self):
+    def PopFromStack(self):
         state = self.stack.pop()
         return state
 
-    def moveToPos(self, t):
-        state = self.popFromStack()
+    def MoveToPos(self, t):
+        state = self.PopFromStack()
         t.setpos(state[0])
         t.seth(state[1])
         
@@ -114,6 +140,10 @@ class Manager():
         for ch in in_str:
             if ch == 'f':
                 self.DrawRoom(t)
+            elif ch == '^':
+                self.DrawInitialRoom(t)
+            elif ch == '#':
+                self.DrawFinalRoom(t)
             elif ch == '1':
                 self.DrawShortCorridor(t)
             elif ch == '2':
@@ -127,9 +157,9 @@ class Manager():
             elif ch == 'u':
                 t.left(180)
             elif ch == '[':
-                self.pushToStack(t)
+                self.PushToStack(t)
             elif ch == ']':
-                self.moveToPos(t)
+                self.MoveToPos(t)
             else:
                 print("Unexpected input")
 
@@ -139,7 +169,7 @@ def Reset(this_screen, this_turtle):
     this_turtle.color('white')
     this_turtle.pensize(4)
     this_turtle.ht()
-    this_turtle.speed(8)
+    this_turtle.speed(0)
 
 def SavePath():
     print(manager.path)
