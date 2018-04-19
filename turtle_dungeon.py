@@ -89,7 +89,6 @@ class Manager():
 
     def RandomWalk(self, t):
         self.DrawInitialRoom(t)
-        self.RandomDirection(t)
         while(manager.count < 30):
             self.DrawLongCorridor(t)
             self.DecideDirection(t, 3)
