@@ -87,34 +87,12 @@ class Manager():
                 t.left(180)
                 self.path = self.path + 'U'
 
-    def RandomDirection(self, t):
-        y = random.randrange(0, 3) 
-        if y == 0:
-            t.right(90)
-            self.path = self.path + 'R'
-        elif y == 1:
-            t.left(90)
-            self.path = self.path + 'L'
-        elif y == 2:
-            t.left(180)
-            self.path = self.path + 'U'
-        else:
-            return
-
     def RandomWalk(self, t):
         self.DrawInitialRoom(t)
         self.RandomDirection(t)
         while(manager.count < 30):
             self.DrawLongCorridor(t)
             self.DecideDirection(t, 3)
-        #self.EndCorridor(t)
-
-    def EndCorridor(self, t):
-        for x in range(2):
-            self.DrawRoom(t)
-        self.path = self.path + 'U'
-        for y in range(2):
-            self.DrawRoom(t)
     
     def pushToStack(self, t):
         state = (t.pos(), t.heading())
@@ -145,6 +123,8 @@ class Manager():
             elif ch == 'R':
                 t.right(90)
             elif ch == 'U':
+                t.left(180)
+            elif ch == 'u':
                 t.left(180)
             elif ch == '[':
                 self.pushToStack(t)
