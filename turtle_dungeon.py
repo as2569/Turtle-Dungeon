@@ -1,6 +1,7 @@
 import turtle
 import random
 import time
+import tkinter as tk
 from L_system import L_system
 
 
@@ -12,6 +13,7 @@ class Manager():
         self.path = ""
         self.pathList = []
         self.stack = []
+        self.canvasList = []
         
     def DrawInitialRoom(self, t):
         t.penup()
@@ -176,24 +178,51 @@ def SavePath():
     manager.pathList.append(manager.path)
     manager.path = ""
 
+#setup 
 manager = Manager(0.5)
-turtle.setup(1200, 800)
-win = turtle.Screen()
-win.screensize(2000, 2000)
-alex = turtle.Turtle()
+#turtle.setup(1200, 800)
+#win = turtle.Screen()
+#win.screensize(2000, 2000)
+#alex = turtle.Turtle()
+
+root = tk.Tk()
+root.config(background='black')
+canvas = tk.Canvas(master=root, width=500, height=500, bg='black', bd=0, scrollregion=(0,0,2500,2500))
+
+hbar= tk.Scrollbar(root,orient=tk.HORIZONTAL)
+hbar.pack(side=tk.BOTTOM,fill=tk.X)
+vbar= tk.Scrollbar(root,orient=tk.VERTICAL)
+vbar.pack(side=tk.RIGHT,fill=tk.Y)
+
+canvas.config(xscrollcommand=hbar.set, yscrollcommand=vbar.set)
+hbar.config(command = canvas.xview)
+vbar.config(command = canvas.yview)
+
+
+
+canvas.pack()
+win = turtle.TurtleScreen(canvas)
+alex = turtle.RawTurtle(canvas)
+
 l_sys = L_system()
 
+#initial
 Reset(win, alex)
-
 manager.RandomWalk(alex)
 
 initialPath = manager.path
-for i in range(0, 3):
+for i in range(0, 1):
     currentPath = ""
+    manager.canvasList.append(turtle.Canvas())
     Reset(win, alex)
     currentPath = l_sys.evolve(initialPath)
     manager.DrawFromInput(alex, currentPath)
     initialPath = currentPath
     time.sleep(2)
-
 print("DONE")
+
+print(manager.canvasList[0])
+#turtle.TurtleScreen = manager.canvasList[0])
+win = turtle.TurtleScreen(manager.canvasList[0])
+
+
