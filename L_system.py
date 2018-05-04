@@ -10,17 +10,18 @@ class L_system:
         if fnmatch.fnmatchcase(in_str, '?U?'): # dead end
             r = in_str[0] + '[R1u][1u][L1u]' + in_str[2]
         elif fnmatch.fnmatch(in_str, '?L?'): # room at L
-            if rand >= 0.5:
+            if rand <= 0.2:
                 r = in_str[0] + in_str[1] + 'f' + in_str[2]
             else:
                 r = in_str
         elif fnmatch.fnmatch(in_str, '?R?'): # room at R
-            if rand >= 0.5:
+            if rand <= 0.2:
                 r = in_str[0] + in_str[1] + 'f' + in_str[2]
             else:
                 r = in_str
         elif fnmatch.fnmatch(in_str, '?u?'): #room at u
             r = in_str[0] + in_str[1] + 'f' + in_str[2]
+            #r = in_str
         elif fnmatch.fnmatch(in_str, '2R2'): # left turn
             r = '21L1L1L12' # left hook
         elif fnmatch.fnmatch(in_str, '2L2'): # right turn
@@ -28,7 +29,7 @@ class L_system:
         elif fnmatch.fnmatch(in_str, '222'): # 3 long
             r = '2[1R1L2L1R1]1L1R2R1L12' # LR brackets
         elif fnmatch.fnmatch(in_str, '?2?'): # 1 long
-            r = in_str[0] + '1f1' + in_str[2]
+            r = in_str[0] + '1f1' + in_str[2] # split long with a room between
         else: # no rule applies
             r = in_str
         return r
