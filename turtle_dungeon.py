@@ -66,11 +66,23 @@ class Manager():
         manager.path = manager.path + '#'
         manager.rooms.append(t.pos())
 
+    def DrawFastRoom(self, t):
+        t.pendown()
+        t.pensize(10)
+        t.backward(5 * manager.scale)
+        t.forward(10 * manager.scale)
+        t.pensize(4)
+        t.back(5 * manager.scale)
+        t.penup()
+        manager.count += 1
+        manager.path = manager.path + 'f'
+        manager.rooms.append(t.pos())
+        
     def DrawRoom(self, t):
         t.penup()
         t.backward(5 * manager.scale)
         t.pendown()
-        t.begin_fill()
+        #t.begin_fill()
         t.right(90)
         t.forward(5 * manager.scale)
         t.left(90)
@@ -82,7 +94,7 @@ class Manager():
         t.left(90)
         t.forward(5 * manager.scale)
         t.left(90)
-        t.end_fill()
+        #t.end_fill()
         t.penup()
         t.forward(5 * manager.scale)
         manager.count += 1
@@ -146,6 +158,7 @@ class Manager():
         for ch in in_str:
             if ch == 'f':
                 self.DrawRoom(t)
+                #self.DrawFastRoom(t)
                 #manager.count += 1
                 #manager.path = manager.path + 'f'
             elif ch == '^':
