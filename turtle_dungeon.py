@@ -9,10 +9,12 @@ class Manager():
     def __init__(self, continueChance):
         self.contChance = continueChance
         self.count = 0
-        self.scale = 1
+        self.scale = 0.5
         self.path = ""
         self.pathList = []
         self.stack = []
+        self.rooms = []
+        self.roomsList = []
         
     def DrawInitialRoom(self, t):
         t.penup()
@@ -37,6 +39,7 @@ class Manager():
         t.forward(5 * manager.scale)
         manager.count += 1
         manager.path = manager.path + '^'
+        manager.rooms.append(t.pos())
 
     def DrawFinalRoom(self, t):
         t.penup()
@@ -61,7 +64,8 @@ class Manager():
         t.forward(5 * manager.scale)
         manager.count += 1
         manager.path = manager.path + '#'
-        
+        manager.rooms.append(t.pos())
+
     def DrawRoom(self, t):
         t.penup()
         t.backward(5 * manager.scale)
@@ -83,6 +87,7 @@ class Manager():
         t.forward(5 * manager.scale)
         manager.count += 1
         manager.path = manager.path + 'f'
+        manager.rooms.append(t.pos())
 
     def DrawShortCorridor(self, t):
         t.pendown()
@@ -137,10 +142,12 @@ class Manager():
     def DrawFromInput(self, t, in_str):
         print("Drawing from input")
         print(in_str)
-        self.DrawInitialRoom(t)
+        #self.DrawInitialRoom(t)
         for ch in in_str:
             if ch == 'f':
                 self.DrawRoom(t)
+                #manager.count += 1
+                #manager.path = manager.path + 'f'
             elif ch == '^':
                 self.DrawInitialRoom(t)
             elif ch == '#':
@@ -170,32 +177,41 @@ def Reset(this_screen, this_turtle):
     this_turtle.color('white')
     this_turtle.pensize(4)
     this_turtle.ht()
-    this_turtle.speed(0)
+    this_turtle.speed(0) # animation speed, 0 disables animation
 
 def SavePath():
     print(manager.path)
     manager.pathList.append(manager.path)
     manager.path = ""
 
-#setup 
-manager = Manager(0.5)
-turtle.setup(1200, 800)
-win = turtle.Screen()
-win.screensize(3000, 3000)
-alex = turtle.Turtle()
+#setup
+cont = True
+while cont is True:
+    time.sleep(3)
+    manager = Manager(0.5)
+    turtle.setup(1200, 800)
+    win = turtle.Screen()
+    win.screensize(3000, 3000)
+    alex = turtle.Turtle()
 
-l_sys = L_system()
+    l_sys = L_system()
 
-#initial
-Reset(win, alex)
-manager.RandomWalk(alex)
 
-initialPath = manager.path
-for i in range(0, 1):
-    currentPath = ""
+    #initial
     Reset(win, alex)
-    currentPath = l_sys.evolve(initialPath)
-    manager.DrawFromInput(alex, currentPath)
-    initialPath = currentPath
-    time.sleep(5)
-print("DONE")
+    manager.RandomWalk(alex)
+    win.tracer()
+
+    initialPath = manager.path
+    for i in range(0, 3):
+        time.sleep(1) # delay between iterations
+        currentPath = ""
+        manager.roomsList.append(manager.rooms)
+        manager.rooms = []
+        Reset(win, alex)
+        currentPath = l_sys.evolve(initialPath)
+        manager.DrawFromInput(alex, currentPath)
+        initialPath = currentPath
+    print("DONE")
+
+#print(manager.roomsList)
